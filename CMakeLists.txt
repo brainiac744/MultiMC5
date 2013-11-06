@@ -325,6 +325,10 @@ logic/tasks/ProgressProvider.h
 logic/tasks/Task.h
 logic/tasks/Task.cpp
 
+# Updater
+logic/GoUpdate.cpp
+logic/GoUpdate.h
+
 # Utilities
 logic/JavaUtils.h
 logic/JavaUtils.cpp
