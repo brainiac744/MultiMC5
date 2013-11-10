@@ -32,6 +32,7 @@ using namespace Util::Commandline;
 
 MultiMC::MultiMC(int &argc, char **argv) : QApplication(argc, argv)
 {
+	m_version = {VERSION_MAJOR, VERSION_MINOR, VERSION_REVISION, VERSION_BUILD};
 	setOrganizationName("MultiMC");
 	setApplicationName("MultiMC5");
 
