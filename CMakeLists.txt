@@ -117,37 +117,8 @@ ELSE()
 	MESSAGE(STATUS "Failed to check Git commit. ${GIT_COMMIT_CHECK_RESULTVAR}")
 ENDIF()
 
-
-######## Set Jenkins info ########
-# Jenkins build tag
-IF(DEFINED MultiMC_BUILD_TAG)
-	MESSAGE(STATUS "Build tag: ${MultiMC_BUILD_TAG}")
-ELSE()
-	MESSAGE(STATUS "No build tag specified.")
-	SET(MultiMC_BUILD_TAG custom)
-ENDIF()
-
-# Architecture detection
-IF(CMAKE_SIZEOF_VOID_P EQUAL 8)
-	SET(MultiMC_ARCH "x64" CACHE STRING "Architecture we're building for.")
-ELSE()
-	SET(MultiMC_ARCH "x86" CACHE STRING "Architecture we're building for.")
-ENDIF()
-MESSAGE(STATUS "Architecture is ${MultiMC_ARCH}")
-
-# Jenkins job name
-IF(WIN32)
-	SET(MultiMC_JOB_NAME "MultiMC5Windows" CACHE STRING "Jenkins job name.")
-ELSEIF(UNIX AND APPLE)
-	SET(MultiMC_JOB_NAME "MultiMC5OSX" CACHE STRING "Jenkins job name.")
-ELSE()
-	SET(MultiMC_JOB_NAME "MultiMC5Linux" CACHE STRING "Jenkins job name.")
-ENDIF()
-
-# Jenkins URL
-SET(MultiMC_JOB_URL "http://ci.forkk.net/job/${MultiMC_JOB_NAME}/arch=${MultiMC_ARCH}${MultiMC_Extra_Label}/"
-	CACHE STRING "URL of the jenkins job to pull updates from.")
-MESSAGE(STATUS "Job URL: ${MultiMC_JOB_URL}")
+SET(MultiMC_BUILD_NAME "custom" CACHE STRING "Build name - use to differentiate builders.")
+SET(MultiMC_UPDATE_URL "invalid" CACHE STRING "URL of the update repository to pull from.")
 
 ######## Configure header ########
 configure_file("${PROJECT_SOURCE_DIR}/config.h.in"

@@ -1,4 +1,16 @@
 
+#include "GoUpdate.h"
+
+#include "config.h"
+
+GoUpdate::GoUpdate()
+{
+}
+
+void GoUpdate::checkForUpdate()
+{
+}
+
 /*
 <Forkk> files.multimc.org/lin64/
 <manmaed> Hi Forkkie

@@ -32,7 +32,8 @@ using namespace Util::Commandline;
 
 MultiMC::MultiMC(int &argc, char **argv) : QApplication(argc, argv)
 {
-	m_version = {VERSION_MAJOR, VERSION_MINOR, VERSION_REVISION, VERSION_BUILD};
+	m_version = {VERSION_MAJOR,	  VERSION_MINOR, VERSION_REVISION,
+				 MULTIMC_BUILD_NAME, VERSION_BUILD};
 	setOrganizationName("MultiMC");
 	setApplicationName("MultiMC5");
 
@@ -105,8 +106,7 @@ MultiMC::MultiMC(int &argc, char **argv) : QApplication(argc, argv)
 		{
 			std::cout << "Version " << VERSION_STR << std::endl;
 			std::cout << "Git " << GIT_COMMIT << std::endl;
-			std::cout << "Tag: " << JENKINS_BUILD_TAG << " " << (ARCH == x64 ? "x86_64" : "x86")
-					  << std::endl;
+			std::cout << "Build: " << MULTIMC_BUILD_NAME << ":" << VERSION_BUILD << std::endl;
 			m_status = MultiMC::Succeeded;
 			return;
 		}
@@ -159,39 +159,40 @@ MultiMC::MultiMC(int &argc, char **argv) : QApplication(argc, argv)
 	{
 		QLOG_INFO() << "No proxy found.";
 	}
-	else for (auto proxy : proxies)
-	{
-		QString proxyDesc;
-		if (proxy.type() == QNetworkProxy::NoProxy)
+	else
+		for (auto proxy : proxies)
 		{
-			QLOG_INFO() << "Using no proxy is an option!";
-			continue;
+			QString proxyDesc;
+			if (proxy.type() == QNetworkProxy::NoProxy)
+			{
+				QLOG_INFO() << "Using no proxy is an option!";
+				continue;
+			}
+			switch (proxy.type())
+			{
+			case QNetworkProxy::DefaultProxy:
+				proxyDesc = "Default proxy: ";
+				break;
+			case QNetworkProxy::Socks5Proxy:
+				proxyDesc = "Socks5 proxy: ";
+				break;
+			case QNetworkProxy::HttpProxy:
+				proxyDesc = "HTTP proxy: ";
+				break;
+			case QNetworkProxy::HttpCachingProxy:
+				proxyDesc = "HTTP caching: ";
+				break;
+			case QNetworkProxy::FtpCachingProxy:
+				proxyDesc = "FTP caching: ";
+				break;
+			}
+			proxyDesc += QString("%3@%1:%2 pass %4")
+							 .arg(proxy.hostName())
+							 .arg(proxy.port())
+							 .arg(proxy.user())
+							 .arg(proxy.password());
+			QLOG_INFO() << proxyDesc;
 		}
-		switch (proxy.type())
-		{
-		case QNetworkProxy::DefaultProxy:
-			proxyDesc = "Default proxy: ";
-			break;
-		case QNetworkProxy::Socks5Proxy:
-			proxyDesc = "Socks5 proxy: ";
-			break;
-		case QNetworkProxy::HttpProxy:
-			proxyDesc = "HTTP proxy: ";
-			break;
-		case QNetworkProxy::HttpCachingProxy:
-			proxyDesc = "HTTP caching: ";
-			break;
-		case QNetworkProxy::FtpCachingProxy:
-			proxyDesc = "FTP caching: ";
-			break;
-		}
-		proxyDesc += QString("%3@%1:%2 pass %4")
-						 .arg(proxy.hostName())
-						 .arg(proxy.port())
-						 .arg(proxy.user())
-						 .arg(proxy.password());
-		QLOG_INFO() << proxyDesc;
-	}
 
 	// create the global network manager
 	m_qnam.reset(new QNetworkAccessManager(this));
@@ -401,8 +402,10 @@ int main_gui(MultiMC &app)
 {
 	// show main window
 	MainWindow mainWin;
-	mainWin.restoreState(QByteArray::fromBase64(MMC->settings()->get("MainWindowState").toByteArray()));
-	mainWin.restoreGeometry(QByteArray::fromBase64(MMC->settings()->get("MainWindowGeometry").toByteArray()));
+	mainWin.restoreState(
+		QByteArray::fromBase64(MMC->settings()->get("MainWindowState").toByteArray()));
+	mainWin.restoreGeometry(
+		QByteArray::fromBase64(MMC->settings()->get("MainWindowGeometry").toByteArray()));
 	mainWin.show();
 	mainWin.checkSetDefaultJava();
 	return app.exec();

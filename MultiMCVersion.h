@@ -3,7 +3,7 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
@@ -28,11 +28,9 @@ struct MultiMCVersion
 	 */
 	QString toString() const
 	{
-		return QString("%1.%2.%3.%4").arg(
-					QString::number(major),
-					QString::number(minor),
-					QString::number(revision),
-					QString::number(build));
+		return QString("%1.%2.%3 (%4-%5)").arg(QString::number(major), QString::number(minor),
+											   QString::number(revision), builder_name,
+											   QString::number(build));
 	}
 
 	/*!
@@ -40,19 +38,25 @@ struct MultiMCVersion
 	 * For MultiMC 5, this will always be 5.
 	 */
 	int major;
-	
+
 	/*!
 	 * \brief The minor version number.
 	 * This number is incremented when major features are added.
 	 */
 	int minor;
-	
+
 	/*!
 	 * \brief The revision number.
 	 * This number is incremented for bugfixes and small features.
 	 */
 	int revision;
-	
+
+	/*!
+	 * \brief The builder name.
+	 * This is the name of the CI job or 'custom'
+	 */
+	QString builder_name;
+
 	/*!
 	 * \brief The build number.
 	 * This number is automatically set by Jenkins. It is incremented every time
@@ -60,4 +64,3 @@ struct MultiMCVersion
 	 */
 	int build;
 };
-
