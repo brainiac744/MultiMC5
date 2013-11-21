@@ -58,6 +58,8 @@ void GoUpdate::updateCheckFinished()
 		auto verMap = version.toMap();
 		versions.append({verMap["Id"].toInt(), verMap["Name"].toString()});
 	}
+
+	QLOG_INFO() << "Update check finished.";
 }
 
 void GoUpdate::checkForUpdate()
@@ -68,7 +70,7 @@ void GoUpdate::checkForUpdate()
 	}
 
 	auto job = new NetJob("Assets index");
-	job->addNetAction(ByteArrayDownload::make(QUrl(repoUrl)));
+	job->addNetAction(ByteArrayDownload::make(QUrl(repoUrl + "index.json")));
 	connect(job, SIGNAL(succeeded()), SLOT(updateCheckFinished()));
 	connect(job, SIGNAL(failed()), SLOT(updateCheckFailed()));
 	index_job.reset(job);

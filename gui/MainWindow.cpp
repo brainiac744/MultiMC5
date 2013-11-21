@@ -77,6 +77,7 @@
 #include "logic/NagUtils.h"
 
 #include "logic/LegacyInstance.h"
+#include <logic/GoUpdate.h>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
@@ -181,6 +182,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 			MMC->lwjgllist()->loadList();
 		}
 
+		auto updater = MMC->goupdate();
+		connect(updater.get(), SIGNAL(updateAvailable()), SLOT(updateAvailable()));
+		updater->checkForUpdate();
+
 		assets_downloader = new OneSixAssets();
 		connect(assets_downloader, SIGNAL(indexStarted()), SLOT(assetsIndexStarted()));
 		connect(assets_downloader, SIGNAL(filesStarted()), SLOT(assetsFilesStarted()));
@@ -228,6 +233,12 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *ev)
 		}
 	}
 	return QMainWindow::eventFilter(obj, ev);
+}
+
+void MainWindow::updateAvailable()
+{
+	//TODO: make better
+	QLOG_INFO() << "Updates are available!";
 }
 
 void MainWindow::onCatToggled(bool state)
@@ -726,8 +737,8 @@ void MainWindow::launchInstance(BaseInstance *instance, LoginResponse response)
 
 	connect(proc, SIGNAL(log(QString, MessageLevel::Enum)), console,
 			SLOT(write(QString, MessageLevel::Enum)));
-	connect(proc, SIGNAL(ended(BaseInstance*,int,QProcess::ExitStatus)), this,
-			SLOT(instanceEnded(BaseInstance*,int,QProcess::ExitStatus)));
+	connect(proc, SIGNAL(ended(BaseInstance *, int, QProcess::ExitStatus)), this,
+			SLOT(instanceEnded(BaseInstance *, int, QProcess::ExitStatus)));
 
 	if (instance->settings().get("ShowConsole").toBool())
 	{

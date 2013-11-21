@@ -138,6 +138,8 @@ slots:
 
 	void launchInstance(BaseInstance *inst, LoginResponse response);
 
+	void updateAvailable();
+
 protected:
 	bool eventFilter(QObject *obj, QEvent *ev);
 	void setCatBackground(bool enabled);
