@@ -58,9 +58,14 @@ public:
 	 */
 	void launch();
 
-	void setMinecraftWorkdir(QString path);
+	BaseInstance *instance()
+	{
+		return m_instance;
+	}
 
-	void setMinecraftArguments(QStringList args);
+	void setWorkdir(QString path);
+
+	void setArguments(QStringList args);
 
 	void killMinecraft();
 
@@ -71,6 +76,21 @@ public:
 	}
 
 signals:
+	/**
+	 * @brief emitted when Minecraft immediately fails to run
+	 */
+	void launch_failed(BaseInstance *);
+
+	/**
+	 * @brief emitted when the PreLaunchCommand fails
+	 */
+	void prelaunch_failed(BaseInstance *, int code, QProcess::ExitStatus status);
+
+	/**
+	 * @brief emitted when the PostLaunchCommand fails
+	 */
+	void postlaunch_failed(BaseInstance *, int code, QProcess::ExitStatus status);
+
 	/**
 	 * @brief emitted when mc has finished and the PostLaunchCommand was run
 	 */

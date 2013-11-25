@@ -38,6 +38,8 @@ void InstanceLauncher::onTerminated()
 
 void InstanceLauncher::onLoginComplete()
 {
+	// TODO: Fix this.
+	/*
 	LoginTask *task = (LoginTask *)QObject::sender();
 	auto result = task->getResult();
 	auto instance = MMC->instances()->getInstanceById(instId);
@@ -48,13 +50,11 @@ void InstanceLauncher::onLoginComplete()
 		return;
 	}
 	console = new ConsoleWindow(proc);
-	console->show();
+	connect(console, SIGNAL(isClosing()), this, SLOT(onTerminated()));
 
-	connect(proc, SIGNAL(ended()), SLOT(onTerminated()));
-	connect(proc, SIGNAL(log(QString, MessageLevel::Enum)), console,
-			SLOT(write(QString, MessageLevel::Enum)));
-
+	proc->setLogin(result.username, result.session_id);
 	proc->launch();
+	*/
 }
 
 void InstanceLauncher::doLogin(const QString &errorMsg)

@@ -10,6 +10,7 @@
 #include "gui/MainWindow.h"
 #include "gui/dialogs/VersionSelectDialog.h"
 #include "logic/lists/InstanceList.h"
+#include "logic/lists/MojangAccountList.h"
 #include "logic/lists/IconList.h"
 #include "logic/lists/LwjglVersionList.h"
 #include "logic/lists/MinecraftVersionList.h"
@@ -150,6 +151,12 @@ MultiMC::MultiMC(int &argc, char **argv) : QApplication(argc, argv)
 	m_instances->loadList();
 	connect(InstDirSetting, SIGNAL(settingChanged(const Setting &, QVariant)),
 			m_instances.get(), SLOT(on_InstFolderChanged(const Setting &, QVariant)));
+
+	// and accounts
+	m_accounts.reset(new MojangAccountList(this));
+	QLOG_INFO() << "Loading accounts...";
+	m_accounts->setListFilePath("accounts.json", true);
+	m_accounts->loadList();
 
 	// init the http meta cache
 	initHttpMetaCache();
@@ -327,8 +334,6 @@ void MultiMC::initGlobalSettings()
 	// The cat
 	m_settings->registerSetting(new Setting("TheCat", false));
 
-	// Shall the main window hide on instance launch
-	m_settings->registerSetting(new Setting("NoHide", false));
 
 	m_settings->registerSetting(new Setting("InstSortMode", "Name"));
 
@@ -344,6 +349,9 @@ void MultiMC::initGlobalSettings()
 	// Window state and geometry
 	m_settings->registerSetting(new Setting("MainWindowState", ""));
 	m_settings->registerSetting(new Setting("MainWindowGeometry", ""));
+
+	m_settings->registerSetting(new Setting("ConsoleWindowState", ""));
+	m_settings->registerSetting(new Setting("ConsoleWindowGeometry", ""));
 }
 
 void MultiMC::initHttpMetaCache()

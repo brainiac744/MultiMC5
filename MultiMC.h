@@ -12,6 +12,7 @@ class LWJGLVersionList;
 class HttpMetaCache;
 class SettingsObject;
 class InstanceList;
+class MojangAccountList;
 class IconList;
 class QNetworkAccessManager;
 class ForgeVersionList;
@@ -55,6 +56,11 @@ public:
 	std::shared_ptr<InstanceList> instances()
 	{
 		return m_instances;
+	}
+
+	std::shared_ptr<MojangAccountList> accounts()
+	{
+		return m_accounts;
 	}
 
 	std::shared_ptr<IconList> icons();
@@ -107,6 +113,7 @@ private:
 	std::shared_ptr<SettingsObject> m_settings;
 	std::shared_ptr<InstanceList> m_instances;
 	std::shared_ptr<GoUpdate> m_go_update;
+	std::shared_ptr<MojangAccountList> m_accounts;
 	std::shared_ptr<IconList> m_icons;
 	std::shared_ptr<QNetworkAccessManager> m_qnam;
 	std::shared_ptr<HttpMetaCache> m_metacache;
