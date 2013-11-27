@@ -37,6 +37,9 @@ ELSEIF(MINGW)
 	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++0x")
 ENDIF()
 
+########    Updater!    ########
+add_subdirectory(mmc_updater)
+
 ################################ INCLUDE LIBRARIES ################################
 
 ######## 3rd Party Libs ########
