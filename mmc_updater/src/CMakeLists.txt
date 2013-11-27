@@ -68,12 +68,11 @@ else() # linuxes and other similar systems
 endif()
 endif()
 
-add_library(updatershared ${UPDATER_SOURCES})
+add_library(updatershared STATIC ${UPDATER_SOURCES})
 
 target_link_libraries(updatershared
   anyoption
   tinyxml
-  tinythread
 )
 
 if (UNIX)

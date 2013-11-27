@@ -5,7 +5,6 @@ enable_testing()
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
 
 include_directories(depends)
-include_directories(depends/TinyThread/source)
 
 if (WIN32)
     include_directories(depends/win32cpp/include)
@@ -42,4 +41,4 @@ endif()
 add_subdirectory(src)
 add_subdirectory(depends/AnyOption)
 add_subdirectory(depends/tinyxml)
-add_subdirectory(depends/TinyThread)
+
